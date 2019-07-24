@@ -6,13 +6,17 @@ import com.stackroute.exceptions.TrackAlreadyExistsException;
 import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.repository.MusicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MusicServiceImpl implements MusicService {
+public class MusicServiceImpl implements MusicService, ApplicationListener<ContextRefreshedEvent>, CommandLineRunner {
 
     MusicRepository musicRepository;
 
@@ -86,6 +90,17 @@ public class MusicServiceImpl implements MusicService {
         List<Track> user_id = musicRepository.getTrackByName(name);
 
         return user_id;
+    }
+
+    @Override
+    public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
+        musicRepository.save(new Track(1, "Good things fall apart", "Illenium"));
+        musicRepository.save(new Track(2, "Borderline", "Tame Impala"));
+    }
+
+    @Override
+    public void run(String... args) throws Exception {
+
     }
 }
 
