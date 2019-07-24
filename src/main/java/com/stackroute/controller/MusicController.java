@@ -1,6 +1,8 @@
 package com.stackroute.controller;
 
 import com.stackroute.domain.Track;
+import com.stackroute.exceptions.TrackAlreadyExistsException;
+import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.service.MusicService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,8 +30,8 @@ public class MusicController {
         try {
             musicService.saveTrack(track);
             responseEntity = new ResponseEntity<String>("Successfully created", HttpStatus.CREATED);
-        } catch (Exception ex) {
-            responseEntity = new ResponseEntity<String>("Could not create", HttpStatus.ALREADY_REPORTED);
+        } catch (TrackAlreadyExistsException ex) {
+            responseEntity = new ResponseEntity<String>(ex.getMessage(), HttpStatus.ALREADY_REPORTED);
         }
         return responseEntity;
     }
@@ -47,8 +49,9 @@ public class MusicController {
         try{
             track = musicService.getById(id);
             return new ResponseEntity<Track>(track, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<String>("Could not find by id", HttpStatus.NOT_FOUND);
+        } catch (TrackNotFoundException e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.NOT_FOUND);
+
         }
 
     }
@@ -56,18 +59,28 @@ public class MusicController {
 
     @DeleteMapping("/delete/{id}")
     public String deleteById(@PathVariable int id) {
-        musicService.deleteById(id);
+        try {
+            musicService.deleteById(id);
+
+        } catch (TrackNotFoundException e) {
+            return e.getMessage();
+        }
+
         return "track deleted";
     }
 
     @PutMapping("/update/{id}")
     public String updateById(@RequestBody Track track, @PathVariable int id) {
 
-        if(musicService.updateById(track, id)) {
-            return "track updated";
+
+        try {
+            musicService.updateById(track, id);
+        } catch (TrackNotFoundException e) {
+            return e.getMessage();
         }
 
-        return "track could not be updated";
+        return "song updated";
+
     }
 
     @GetMapping("/titlemusic/{name}")

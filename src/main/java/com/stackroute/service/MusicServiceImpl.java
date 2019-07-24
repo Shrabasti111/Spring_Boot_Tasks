@@ -1,6 +1,9 @@
 package com.stackroute.service;
 
+
 import com.stackroute.domain.Track;
+import com.stackroute.exceptions.TrackAlreadyExistsException;
+import com.stackroute.exceptions.TrackNotFoundException;
 import com.stackroute.repository.MusicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,9 +22,16 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    public Track saveTrack(Track track) {
+    public Track saveTrack(Track track) throws TrackAlreadyExistsException {
 
+        if(musicRepository.existsById(track.getId())) {
+            throw new TrackAlreadyExistsException("Track already exists");
+        }
         Track savedTrack = musicRepository.save(track);
+
+        if(savedTrack == null) {
+            throw new TrackAlreadyExistsException("Track already exists");
+        }
         return savedTrack;
     }
 
@@ -31,27 +41,39 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    public Track getById(int id) {
+    public Track getById(int id) throws TrackNotFoundException {
+
 
         Optional<Track> getByIdTrack = musicRepository.findById(id);
+
+        if(getByIdTrack.isEmpty()) {
+            throw new TrackNotFoundException("Track does not exist");
+        }
 
         return getByIdTrack.get();
     }
 
     @Override
-    public void deleteById(int id) {
+    public void deleteById(int id) throws TrackNotFoundException {
 
+        Optional<Track> getByIdTrack = musicRepository.findById(id);
+
+        if(getByIdTrack.isEmpty()) {
+            throw new TrackNotFoundException("Track does not exist");
+        }
         musicRepository.deleteById(id);
 
     }
 
     @Override
-    public boolean updateById(Track track, int id) {
+    public boolean updateById(Track track, int id) throws TrackNotFoundException {
 
         Optional<Track> updateTrack = musicRepository.findById(id);
 
-        if(updateTrack.isEmpty())
-            return false;
+        if(updateTrack.isEmpty()) {
+            throw new TrackNotFoundException("Track does not exist");
+        }
+
 
         track.setId(id);
         musicRepository.save(track);
