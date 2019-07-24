@@ -68,9 +68,18 @@ public class MusicController {
         }
 
         return "track could not be updated";
+    }
+
+    @GetMapping("/titlemusic/{name}")
+    public ResponseEntity<?> getTrackByName(@PathVariable String name) {
+
+        List<Track> track = musicService.getTrackByName(name);
+        return new ResponseEntity<List<Track>>(track, HttpStatus.OK);
 
     }
 
 
+
 }
+
 

@@ -58,6 +58,13 @@ public class MusicServiceImpl implements MusicService {
         return true;
     }
 
+    @Override
+    public List<Track> getTrackByName(String name) {
+
+        List<Track> user_id = musicRepository.getTrackByName(name);
+
+        return user_id;
+    }
 }
 
 

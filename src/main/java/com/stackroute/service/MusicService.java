@@ -16,5 +16,7 @@ public interface MusicService  {
 
     public boolean updateById(Track track, int id);
 
+    public List<Track> getTrackByName(String name);
+
 
 }
