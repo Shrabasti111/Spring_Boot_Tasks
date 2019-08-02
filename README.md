@@ -1,3 +1,16 @@
+H2-console : Task 2
+query-task : Task 3
+add-swagger: Task 4
+custom-exceptions: Task 5
+prefill-at-startup: Task 6
+global-exception: Task 7
+application-properties: Task 8
+lombok: Task 9
+Mockito-task: Mockito test cases
+mongodb: Mongo db applied
+
+TASK 1
+
 Tasks to be Done Post Demo
 1. Complete all the endpoints for CRUD operations on Muzix
 2. Use h2-console to view in-memory data
