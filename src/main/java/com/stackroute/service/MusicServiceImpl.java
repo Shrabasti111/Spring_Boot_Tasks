@@ -17,11 +17,14 @@ import java.util.Optional;
 @Service
 public class MusicServiceImpl implements MusicService, ApplicationListener<ContextRefreshedEvent>, CommandLineRunner {
 
-
+    @Value("${track.1.id:default}")
+    String id1;
     @Value("${track.1.name:default}")
     String name1;
     @Value("${track.1.comments:default}")
     String comments1;
+    @Value("${track.2.id:default}")
+    String id2;
     @Value("${track.2.name:default}")
     String name2;
     @Value("${track.2.comments:default}")
@@ -72,7 +75,7 @@ public class MusicServiceImpl implements MusicService, ApplicationListener<Conte
     }
 
     @Override
-    public boolean deleteById(int id) throws TrackNotFoundException {
+    public List<Track> deleteById(int id) throws TrackNotFoundException {
 
         Optional<Track> getByIdTrack = musicRepository.findById(id);
 
@@ -80,7 +83,8 @@ public class MusicServiceImpl implements MusicService, ApplicationListener<Conte
             throw new TrackNotFoundException("Track does not exist");
         }
         musicRepository.deleteById(id);
-        return true;
+        List<Track> trackList = musicRepository.findAll();
+        return trackList;
 
     }
 
@@ -113,8 +117,8 @@ public class MusicServiceImpl implements MusicService, ApplicationListener<Conte
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        musicRepository.save(new Track(1, name1, comments1));
-        musicRepository.save(new Track(2, name2, comments2));
+        musicRepository.save(new Track(id1, name1, comments1));
+        musicRepository.save(new Track(id2, name2, comments2));
     }
 
     @Override
