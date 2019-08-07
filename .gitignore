@@ -29,3 +29,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+musicapp.iml
+mvnw
+mvnw.cmd
+.idea
+.mvn
+
+
