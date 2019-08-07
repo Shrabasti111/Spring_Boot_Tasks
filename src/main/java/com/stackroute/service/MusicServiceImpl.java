@@ -19,10 +19,14 @@ import java.util.Optional;
 public class MusicServiceImpl implements MusicService, ApplicationListener<ContextRefreshedEvent>, CommandLineRunner {
 
 
+    @Value("${track.1.id:default}")
+    String id1;
     @Value("${track.1.name:default}")
     String name1;
     @Value("${track.1.comments:default}")
     String comments1;
+    @Value("${track.2.id:default}")
+    String id2;
     @Value("${track.2.name:default}")
     String name2;
     @Value("${track.2.comments:default}")
@@ -115,8 +119,8 @@ public class MusicServiceImpl implements MusicService, ApplicationListener<Conte
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        musicRepository.save(new Track(1, name1, comments1));
-        musicRepository.save(new Track(2, name2, comments2));
+        musicRepository.save(new Track(id1, name1, comments1));
+        musicRepository.save(new Track(id2, name2, comments2));
     }
 
     @Override
