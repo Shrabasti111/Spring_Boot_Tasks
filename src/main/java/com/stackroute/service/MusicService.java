@@ -12,9 +12,9 @@ public interface MusicService  {
 
     public Track getById(int id);
 
-    public void deleteById(int id);
+    public boolean deleteById(int id);
 
-    public boolean updateById(Track track, int id);
+    public Track updateById(Track track, int id);
 
 
 }
