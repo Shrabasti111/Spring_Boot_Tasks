@@ -11,7 +11,7 @@ import java.util.Optional;
 @Service
 public class MusicServiceImpl implements MusicService {
 
-    MusicRepository musicRepository;
+    private MusicRepository musicRepository;
 
     @Autowired
     public MusicServiceImpl(MusicRepository musicRepository) {
@@ -39,10 +39,10 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    public boolean deleteById(int id) {
+    public List<Track> deleteById(int id) {
 
         musicRepository.deleteById(id);
-        return true;
+        return musicRepository.findAll();
     }
 
     @Override
