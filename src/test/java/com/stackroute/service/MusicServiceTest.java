@@ -70,7 +70,7 @@ public class MusicServiceTest {
     }
 
     @Test
-    public void testGetAllTracks(){
+    public void testGetAllTracks() throws TrackNotFoundException {
 
         musicRepository.save(track);
         //stubbing the mock to return specific data
