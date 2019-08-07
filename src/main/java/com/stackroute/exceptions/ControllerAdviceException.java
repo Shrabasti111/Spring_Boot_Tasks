@@ -13,4 +13,5 @@ public class ControllerAdviceException {
     public ResponseEntity<String> exceptionHandler(Exception e) {
         return new ResponseEntity<>("Error thrown globally : " + e.getMessage(), HttpStatus.CONFLICT);
     }
+    
 }
