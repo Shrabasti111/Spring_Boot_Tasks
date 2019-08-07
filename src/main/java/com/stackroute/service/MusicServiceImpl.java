@@ -73,7 +73,7 @@ public class MusicServiceImpl implements MusicService, ApplicationListener<Conte
     }
 
     @Override
-    public boolean deleteById(int id) throws TrackNotFoundException {
+    public List<Track> deleteById(int id) throws TrackNotFoundException {
 
         Optional<Track> getByIdTrack = musicRepository.findById(id);
 
@@ -81,7 +81,8 @@ public class MusicServiceImpl implements MusicService, ApplicationListener<Conte
             throw new TrackNotFoundException("Track does not exist");
         }
         musicRepository.deleteById(id);
-        return true;
+        List<Track> updatedTracks = musicRepository.findAll();
+        return updatedTracks;
 
     }
 
