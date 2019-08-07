@@ -87,14 +87,14 @@ public class MusicServiceImpl implements MusicService {
         return trackList;
     }
     
-    
-
-    
-
-    @Override
-    public List<Track> getTrackByName(String name) {
+   @Override
+    public List<Track> getTrackByName(String name) throws TrackNotFoundException {
 
         List<Track> user_id = musicRepository.getTrackByName(name);
+
+        if(user_id.isEmpty()) {
+            throw new TrackNotFoundException("Track not found");
+        }
 
         return user_id;
     }
