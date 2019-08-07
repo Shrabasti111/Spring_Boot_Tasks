@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("musicapp/v1")
+@RequestMapping("api/v1")
 public class MusicController {
 
     private MusicService musicService;
@@ -36,7 +36,7 @@ public class MusicController {
         return responseEntity;
     }
 
-    @GetMapping("/getmusic")
+    @GetMapping("/musics")
     public ResponseEntity<?> getTrack() {
         return new ResponseEntity<List<Track>>(musicService.getTrack(), HttpStatus.OK);
     }
@@ -57,7 +57,7 @@ public class MusicController {
     }
 
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/music/{id}")
     public String deleteById(@PathVariable int id) {
         try {
             musicService.deleteById(id);
@@ -69,7 +69,7 @@ public class MusicController {
         return "track deleted";
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/music/{id}")
     public String updateById(@RequestBody Track track, @PathVariable int id) {
 
 
@@ -83,7 +83,7 @@ public class MusicController {
 
     }
 
-    @GetMapping("/titlemusic/{name}")
+    @GetMapping("/music/{name}")
     public ResponseEntity<?> getTrackByName(@PathVariable String name) {
 
         List<Track> track = musicService.getTrackByName(name);
