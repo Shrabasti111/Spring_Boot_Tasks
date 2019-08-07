@@ -68,7 +68,7 @@ public class MusicControllerTest {
     @Test
     public void testGetAllTracks() throws Exception {
         when(musicService.getTrack()).thenReturn(list);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/getmusic")
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/musics")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andDo(MockMvcResultHandlers.print());
@@ -78,7 +78,7 @@ public class MusicControllerTest {
     @Test
     public void testDeleteMusic() throws Exception {
         when(musicService.deleteById(2)).thenReturn(true);
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/delete/2")
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/music/2")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
                 .andDo(MockMvcResultHandlers.print());
@@ -88,7 +88,7 @@ public class MusicControllerTest {
     public void updateTrack() throws Exception
     {
         when(musicService.updateById(track,1)).thenReturn(track);
-        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/update/1")
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/music/1")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andDo(MockMvcResultHandlers.print());
