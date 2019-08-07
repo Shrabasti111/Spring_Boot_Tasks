@@ -38,25 +38,7 @@ public class MusicServiceImpl implements MusicService {
         return getByIdTrack.get();
     }
 
-    @Override
-    public void deleteById(int id) {
-
-        musicRepository.deleteById(id);
-
-    }
-
-    @Override
-    public boolean updateById(Track track, int id) {
-
-        Optional<Track> updateTrack = musicRepository.findById(id);
-
-        if(updateTrack.isEmpty())
-            return false;
-
-        track.setId(id);
-        musicRepository.save(track);
-        return true;
-    }
+    
 
     @Override
     public List<Track> getTrackByName(String name) {
@@ -65,6 +47,24 @@ public class MusicServiceImpl implements MusicService {
 
         return user_id;
     }
+    
+    @Override
+    public List<Track> deleteById(int id) {
+
+        musicRepository.deleteById(id);
+        return musicRepository.findAll();
+    }
+
+    @Override
+    public Track updateById(Track track, int id) {
+
+        Optional<Track> updateTrack = musicRepository.findById(id);
+
+        track.setId(id);
+        musicRepository.save(track);
+        return updateTrack.get();
+    }
+
 }
 
 
