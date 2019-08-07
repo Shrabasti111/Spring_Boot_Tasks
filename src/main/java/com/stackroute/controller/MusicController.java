@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("musicapp/v1")
+@RequestMapping("api/v1")
 public class MusicController {
 
     private MusicService musicService;
@@ -36,9 +36,19 @@ public class MusicController {
         return responseEntity;
     }
 
-    @GetMapping("/getmusic")
+    @GetMapping("/musics")
     public ResponseEntity<?> getTrack() {
-        return new ResponseEntity<List<Track>>(musicService.getTrack(), HttpStatus.OK);
+
+        ResponseEntity responseEntity;
+
+        try {
+            responseEntity = new ResponseEntity<List<Track>>(musicService.getTrack(), HttpStatus.OK);
+        } catch (TrackNotFoundException ex) {
+            responseEntity = new ResponseEntity<String>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
+        return  responseEntity;
+
     }
 
     @GetMapping("/music/{id}")
@@ -57,40 +67,49 @@ public class MusicController {
     }
 
 
-    @DeleteMapping("/delete/{id}")
-    public String deleteById(@PathVariable int id) {
+    @DeleteMapping("/music/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable int id) {
         try {
             musicService.deleteById(id);
+            return  ResponseEntity.noContent().build();
 
         } catch (TrackNotFoundException e) {
-            return e.getMessage();
+            return ResponseEntity.notFound().build();
         }
-
-        return "track deleted";
     }
 
-    @PutMapping("/update/{id}")
-    public String updateById(@RequestBody Track track, @PathVariable int id) {
+    @PutMapping("/music/{id}")
+    public ResponseEntity<?> updateById(@RequestBody Track track, @PathVariable int id) {
 
+        ResponseEntity responseEntity;
 
         try {
             musicService.updateById(track, id);
+            responseEntity = new ResponseEntity<String>("Successfully updated", HttpStatus.CREATED);
+
         } catch (TrackNotFoundException e) {
-            return e.getMessage();
+
+            responseEntity = new ResponseEntity<String>(e.getMessage(), HttpStatus.ALREADY_REPORTED);
         }
 
-        return "song updated";
+        return responseEntity;
 
     }
 
-    @GetMapping("/titlemusic/{name}")
+    @GetMapping("/music/{name}")
     public ResponseEntity<?> getTrackByName(@PathVariable String name) {
 
-        List<Track> track = musicService.getTrackByName(name);
-        return new ResponseEntity<List<Track>>(track, HttpStatus.OK);
+        ResponseEntity responseEntity;
 
+        try {
+            List<Track> track = musicService.getTrackByName(name);
+            responseEntity = new ResponseEntity<List<Track>>(track, HttpStatus.OK);
+        } catch (TrackNotFoundException ex) {
+            responseEntity = new ResponseEntity<String>(ex.getMessage(), HttpStatus.NOT_FOUND);
+        }
+
+        return responseEntity;
     }
-
 
 
 }
