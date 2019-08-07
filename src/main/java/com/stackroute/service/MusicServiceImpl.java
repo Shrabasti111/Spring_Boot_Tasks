@@ -19,18 +19,21 @@ import java.util.Optional;
 @Service
 public class MusicServiceImpl implements MusicService, ApplicationListener<ContextRefreshedEvent>, CommandLineRunner {
 
-
+    @Value("${track.1.id:default}")
+    String id1;
     @Value("${track.1.name:default}")
     String name1;
     @Value("${track.1.comments:default}")
     String comments1;
+    @Value("${track.2.id:default}")
+    String id2;
     @Value("${track.2.name:default}")
     String name2;
     @Value("${track.2.comments:default}")
     String comments2;
 
 
-    MusicRepository musicRepository;
+    private MusicRepository musicRepository;
 
     @Autowired
     public MusicServiceImpl(MusicRepository musicRepository) {
@@ -52,8 +55,12 @@ public class MusicServiceImpl implements MusicService, ApplicationListener<Conte
     }
 
     @Override
-    public List<Track> getTrack() {
-        return (List<Track>)musicRepository.findAll();
+    public List<Track> getTrack() throws TrackNotFoundException {
+        List<Track> trackList = musicRepository.findAll();
+        if(trackList.isEmpty()) {
+            throw new TrackNotFoundException("No tracks found");
+        }
+        return trackList;
     }
 
     @Override
@@ -70,7 +77,7 @@ public class MusicServiceImpl implements MusicService, ApplicationListener<Conte
     }
 
     @Override
-    public void deleteById(int id) throws TrackNotFoundException {
+    public List<Track> deleteById(int id) throws TrackNotFoundException {
 
         Optional<Track> getByIdTrack = musicRepository.findById(id);
 
@@ -78,11 +85,13 @@ public class MusicServiceImpl implements MusicService, ApplicationListener<Conte
             throw new TrackNotFoundException("Track does not exist");
         }
         musicRepository.deleteById(id);
+        List<Track> updatedTracks = musicRepository.findAll();
+        return updatedTracks;
 
     }
 
     @Override
-    public boolean updateById(Track track, int id) throws TrackNotFoundException {
+    public Track updateById(Track track, int id) throws TrackNotFoundException {
 
         Optional<Track> updateTrack = musicRepository.findById(id);
 
@@ -93,21 +102,25 @@ public class MusicServiceImpl implements MusicService, ApplicationListener<Conte
 
         track.setId(id);
         musicRepository.save(track);
-        return true;
+        return updateTrack.get();
     }
 
     @Override
-    public List<Track> getTrackByName(String name) {
+    public List<Track> getTrackByName(String name) throws TrackNotFoundException {
 
         List<Track> user_id = musicRepository.getTrackByName(name);
+
+        if(user_id.isEmpty()) {
+            throw new TrackNotFoundException("Track not found");
+        }
 
         return user_id;
     }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent contextRefreshedEvent) {
-        musicRepository.save(new Track(1, name1, comments1));
-        musicRepository.save(new Track(2, name2, comments2));
+        musicRepository.save(new Track(id1, name1, comments1));
+        musicRepository.save(new Track(id2, name2, comments2));
     }
 
     @Override
