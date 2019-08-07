@@ -35,10 +35,6 @@ public class MusicServiceImpl implements MusicService {
         return savedTrack;
     }
 
-    @Override
-    public List<Track> getTrack() {
-        return (List<Track>)musicRepository.findAll();
-    }
 
     @Override
     public Track getById(int id) throws TrackNotFoundException {
@@ -52,9 +48,9 @@ public class MusicServiceImpl implements MusicService {
 
         return getByIdTrack.get();
     }
-
+    
     @Override
-    public void deleteById(int id) throws TrackNotFoundException {
+    public List<Track> deleteById(int id) throws TrackNotFoundException {
 
         Optional<Track> getByIdTrack = musicRepository.findById(id);
 
@@ -62,11 +58,13 @@ public class MusicServiceImpl implements MusicService {
             throw new TrackNotFoundException("Track does not exist");
         }
         musicRepository.deleteById(id);
+        List<Track> trackList = musicRepository.findAll();
+        return trackList;
 
     }
 
     @Override
-    public boolean updateById(Track track, int id) throws TrackNotFoundException {
+    public Track updateById(Track track, int id) throws TrackNotFoundException {
 
         Optional<Track> updateTrack = musicRepository.findById(id);
 
@@ -77,8 +75,21 @@ public class MusicServiceImpl implements MusicService {
 
         track.setId(id);
         musicRepository.save(track);
-        return true;
+        return updateTrack.get();
     }
+
+    @Override
+    public List<Track> getTrack() throws TrackNotFoundException {
+        List<Track> trackList = musicRepository.findAll();
+        if(trackList.isEmpty()) {
+            throw new TrackNotFoundException("No tracks found");
+        }
+        return trackList;
+    }
+    
+    
+
+    
 
     @Override
     public List<Track> getTrackByName(String name) {
