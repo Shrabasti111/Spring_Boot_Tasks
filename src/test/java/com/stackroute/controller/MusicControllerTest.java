@@ -77,7 +77,7 @@ public class MusicControllerTest {
 
     @Test
     public void testDeleteMusic() throws Exception {
-        when(musicService.deleteById(2)).thenReturn(true);
+        when(musicService.deleteById(2)).thenReturn(list);
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/music/2")
                 .contentType(MediaType.APPLICATION_JSON).content(asJsonString(track)))
                 .andExpect(MockMvcResultMatchers.status().isNoContent())
