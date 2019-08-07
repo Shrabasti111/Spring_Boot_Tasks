@@ -39,23 +39,20 @@ public class MusicServiceImpl implements MusicService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public boolean deleteById(int id) {
 
         musicRepository.deleteById(id);
-
+        return true;
     }
 
     @Override
-    public boolean updateById(Track track, int id) {
+    public Track updateById(Track track, int id) {
 
         Optional<Track> updateTrack = musicRepository.findById(id);
 
-        if(updateTrack.isEmpty())
-            return false;
-
         track.setId(id);
         musicRepository.save(track);
-        return true;
+        return updateTrack.get();
     }
 
 }
