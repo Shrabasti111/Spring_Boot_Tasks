@@ -14,7 +14,7 @@ public interface MusicService  {
 
     public Track getById(int id) throws TrackNotFoundException;
 
-    public boolean deleteById(int id) throws TrackNotFoundException;
+    public List<Track> deleteById(int id) throws TrackNotFoundException;
 
     public Track updateById(Track track, int id) throws TrackNotFoundException;
 
